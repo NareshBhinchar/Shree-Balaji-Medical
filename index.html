@@ -34,6 +34,11 @@
   <style>
     html { scroll-behavior: smooth; }
     body { font-family: Poppins, sans-serif; }
+    html, body { width: 100%; max-width: 100%; margin: 0; padding: 0; overflow-x: hidden; }
+    #home { width: 100%; max-width: none; }
+    #home > img,
+    #home > .hero-overlay,
+    #home > .bg-gradient-to-t { width: 100%; max-width: none; }
     .nav-scrolled { background: rgba(255,255,255,.94); box-shadow: 0 8px 30px rgba(16,42,67,.08); backdrop-filter: blur(16px); }
     .hero-overlay { background: linear-gradient(90deg, rgba(7,30,50,.82), rgba(7,30,50,.38), rgba(7,30,50,.08)); }
     .glass { background: rgba(255,255,255,.78); backdrop-filter: blur(18px); }
@@ -44,6 +49,80 @@
     .shine { position:relative; overflow:hidden; }
     .shine:after { content:""; position:absolute; inset:0; transform:translateX(-120%); background:linear-gradient(100deg,transparent,rgba(255,255,255,.25),transparent); transition:transform .7s; }
     .shine:hover:after { transform:translateX(120%); }
+
+    /* Responsive refinements */
+    * { box-sizing: border-box; }
+    body { overflow-x: hidden; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    @media (max-width: 1023px) {
+      #navbar nav { height: 72px; }
+      #home { min-height: 700px; }
+      #home > img { object-position: 58% center; }
+    }
+
+    @media (max-width: 767px) {
+      #navbar nav { padding-left: 16px; padding-right: 16px; }
+      #home { width: 100vw; max-width: 100vw; min-height: 720px; }
+      #home > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+      #home .hero-overlay {
+        background: linear-gradient(90deg, rgba(7,30,50,.88), rgba(7,30,50,.50), rgba(7,30,50,.18));
+      }
+      #home h1 {
+        font-size: clamp(2.25rem, 10vw, 3.5rem);
+        line-height: 1.08;
+      }
+      #home p { line-height: 1.65; }
+      #home .relative.z-10 { padding-top: 92px; padding-bottom: 36px; }
+      #home .mt-9 a { width: 100%; }
+      #home .mt-8 { gap: 12px 18px; }
+
+      section { scroll-margin-top: 80px; }
+      .card-hover:hover { transform: none; }
+
+      #services, #products, #trust, #process, #location {
+        padding-top: 64px;
+        padding-bottom: 64px;
+      }
+
+      #services .grid, #process .grid { gap: 14px; }
+      #products .grid { gap: 16px; margin-top: 32px; }
+      #products article img { height: 210px; }
+
+      #trust h2 { font-size: 2rem; line-height: 1.15; }
+      #trust .inline-flex { width: 100%; }
+      #trust .inline-flex .text-5xl { font-size: 2.5rem; }
+
+      #process h2 { line-height: 1.2; }
+      #process .bg-white.rounded-3xl { padding: 24px; }
+
+      #location .mt-8 { height: 320px; }
+      #location .mt-8 iframe { min-height: 320px; }
+
+      #contactForm { padding: 24px; }
+      #contactForm .grid { grid-template-columns: 1fr; }
+
+      footer .grid { gap: 28px; }
+      footer .mt-10 { margin-top: 32px; }
+
+      /* Prevent long words/URLs from stretching the viewport */
+      h1, h2, h3, p, a, div { overflow-wrap: anywhere; }
+    }
+
+    @media (max-width: 380px) {
+      #navbar .w-11 { width: 40px; height: 40px; }
+      #navbar .gap-3 { gap: 8px; }
+      #navbar .text-sm { font-size: 12px; }
+      #navbar .text-\[10px\] { font-size: 8px; }
+      #home { min-height: 760px; }
+      #home h1 { font-size: 2.15rem; }
+      #home .px-5 { padding-left: 16px; padding-right: 16px; }
+    }
   </style>
 </head>
 
@@ -67,9 +146,26 @@
         <a href="#process" class="hover:text-medical transition">Prescription</a>
         <a href="#location" class="hover:text-medical transition">Location</a>
       </div>
-      <a href="tel:07410974085" class="shine bg-neon text-white px-4 sm:px-5 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-pink-200 hover:scale-105 transition">
-        <span class="hidden sm:inline">Call Now</span><span class="sm:hidden">Call</span>
-      </a>
+
+      <div class="flex items-center gap-2">
+        <a href="tel:07410974085" class="shine bg-neon text-white px-3 sm:px-5 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-pink-200 hover:scale-105 transition">
+          <span class="hidden sm:inline">Call Now</span><span class="sm:hidden">Call</span>
+        </a>
+        <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false"
+                class="lg:hidden w-11 h-11 rounded-xl bg-white/90 text-ink grid place-items-center shadow-md">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="mobileMenu" class="hidden lg:hidden absolute top-[calc(100%-4px)] left-4 right-4 rounded-2xl bg-white/95 backdrop-blur-xl border shadow-xl p-3">
+        <div class="flex flex-col text-sm font-semibold">
+          <a href="#services" class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-100">Services</a>
+          <a href="#products" class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-100">Products</a>
+          <a href="#trust" class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-100">Why Us</a>
+          <a href="#process" class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-100">Prescription</a>
+          <a href="#location" class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-100">Location</a>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -402,6 +498,29 @@
     const updateNav = () => navbar.classList.toggle('nav-scrolled', window.scrollY > 30);
     updateNav();
     window.addEventListener('scroll', updateNav);
+
+    // Mobile navigation
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!isOpen));
+      menuBtn.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+      menuBtn.innerHTML = `<i data-lucide="${isOpen ? 'menu' : 'x'}" class="w-5 h-5"></i>`;
+      lucide.createIcons();
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-label', 'Open menu');
+        menuBtn.innerHTML = '<i data-lucide="menu" class="w-5 h-5"></i>';
+        lucide.createIcons();
+      });
+    });
 
     document.getElementById('contactForm').addEventListener('submit', function(e) {
       e.preventDefault();
